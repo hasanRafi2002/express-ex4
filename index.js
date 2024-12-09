@@ -121,31 +121,108 @@ app.get('/api/users-2', async (req, res) => {
   }
 });
 
-// POST User
-app.post('/api/users-2', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const userCollection = db.collection('users-2');
-    
-    // Validate request body
-    const { name, email, age } = req.body;
-    if (!name || !email) {
-      return res.status(400).json({ message: 'Name and email are required' });
-    }
 
-    const newUser = { name, email, age };
-    const result = await userCollection.insertOne(newUser);
+
+
+
+// POST User
+// app.post('/api/users-2', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const userCollection = db.collection('users-2');
     
-    res.status(201).json({
-      message: 'User created successfully',
-      user: { ...newUser, _id: result.insertedId }
-    });
-  } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ message: 'Error creating user' });
-  }
-});
+//     // Validate request body
+//     const { name, email, age } = req.body;
+//     if (!name || !email) {
+//       return res.status(400).json({ message: 'Name and email are required' });
+//     }
+
+//     const newUser = { name, email, age };
+//     const result = await userCollection.insertOne(newUser);
+    
+//     res.status(201).json({
+//       message: 'User created successfully',
+//       user: { ...newUser, _id: result.insertedId }
+//     });
+//   } catch (error) {
+//     console.error('Error creating user:', error);
+//     res.status(500).json({ message: 'Error creating user' });
+//   }
+// });
+
+
+// POST User/Equipment
+app.post('/api/users-2', async (req, res) => {
+    try {
+      await connectToDatabase();
+      const db = client.db('myDatabase');
+      const userCollection = db.collection('users-2');
+      
+      // Destructure all fields from the request body
+      const {
+        image,
+        itemName,
+        categoryName,
+        description,
+        price,
+        rating,
+        customization,
+        processingTime,
+        stockStatus,
+        userEmail,
+        userName
+      } = req.body;
+  
+      // Validate required fields
+      if (!itemName || !price || !stockStatus || !categoryName) {
+        return res.status(400).json({ 
+          message: 'Missing required fields',
+          requiredFields: ['itemName', 'price', 'stockStatus', 'categoryName']
+        });
+      }
+  
+      // Prepare the new equipment/user document
+      const newEquipment = {
+        image: image || '',
+        itemName,
+        categoryName,
+        description: description || '',
+        price: Number(price),
+        rating: Number(rating) || 0,
+        customization: customization || '',
+        processingTime: processingTime || '',
+        stockStatus: Number(stockStatus),
+        userEmail,
+        userName,
+        createdAt: new Date()
+      };
+  
+      // Insert the new document
+      const result = await userCollection.insertOne(newEquipment);
+      
+      res.status(201).json({
+        message: 'Equipment added successfully',
+        equipment: { 
+          ...newEquipment, 
+          _id: result.insertedId 
+        }
+      });
+    } catch (error) {
+      console.error('Error adding equipment:', error);
+      res.status(500).json({ 
+        message: 'Error adding equipment',
+        error: error.message 
+      });
+    }
+  });
+
+
+
+
+
+
+
 
 // PUT (Update) User
 app.put('/api/users-2/:id', async (req, res) => {
