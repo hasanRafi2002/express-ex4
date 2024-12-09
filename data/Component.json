@@ -1,7 +1,7 @@
 [
     {
       "id": "1",
-      "image": "https://example.com/images/football.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.02.jpeg?raw=true",
       "itemName": "Football",
       "categoryName": "Soccer",
       "description": "High-quality leather football for outdoor and indoor use.",
@@ -13,7 +13,7 @@
     },
     {
       "id": "2",
-      "image": "https://example.com/images/basketball.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.01.jpeg?raw=true",
       "itemName": "Basketball",
       "categoryName": "Basketball",
       "description": "Durable basketball with superior grip for indoor and outdoor courts.",
@@ -25,7 +25,7 @@
     },
     {
       "id": "3",
-      "image": "https://example.com/images/baseball-bat.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.17.jpeg?raw=true",
       "itemName": "Baseball Bat",
       "categoryName": "Baseball",
       "description": "Lightweight aluminum bat with ergonomic grip.",
@@ -37,7 +37,7 @@
     },
     {
       "id": "4",
-      "image": "https://example.com/images/tennis-racket.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.16.jpeg?raw=true",
       "itemName": "Tennis Racket",
       "categoryName": "Tennis",
       "description": "Carbon fiber tennis racket with enhanced power and control.",
@@ -49,7 +49,7 @@
     },
     {
       "id": "5",
-      "image": "https://example.com/images/cricket-ball.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.15.jpeg?raw=true",
       "itemName": "Cricket Ball",
       "categoryName": "Cricket",
       "description": "High-quality leather cricket ball, durable and perfect for match play.",
@@ -61,7 +61,7 @@
     },
     {
       "id": "6",
-      "image": "https://example.com/images/golf-club.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.14%20(1).jpeg?raw=true",
       "itemName": "Golf Club",
       "categoryName": "Golf",
       "description": "Premium golf club with lightweight shaft and ergonomic handle.",
@@ -73,7 +73,7 @@
     },
     {
       "id": "7",
-      "image": "https://example.com/images/soccer-shoes.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/shoe.png?raw=true",
       "itemName": "Soccer Shoes",
       "categoryName": "Soccer",
       "description": "Comfortable soccer shoes with cleats for better traction.",
@@ -85,7 +85,7 @@
     },
     {
       "id": "8",
-      "image": "https://example.com/images/volleyball.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.14.jpeg?raw=true",
       "itemName": "Volleyball",
       "categoryName": "Volleyball",
       "description": "Soft-touch volleyball for indoor and outdoor play.",
@@ -97,7 +97,7 @@
     },
     {
       "id": "9",
-      "image": "https://example.com/images/rugby-ball.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.13.jpeg?raw=true",
       "itemName": "Rugby Ball",
       "categoryName": "Rugby",
       "description": "Durable rugby ball with superior grip and control.",
@@ -109,7 +109,7 @@
     },
     {
       "id": "10",
-      "image": "https://example.com/images/boxing-gloves.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.12.jpeg?raw=true",
       "itemName": "Boxing Gloves",
       "categoryName": "Boxing",
       "description": "High-density foam boxing gloves for intense training.",
@@ -121,7 +121,7 @@
     },
     {
       "id": "11",
-      "image": "https://example.com/images/swim-goggles.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.11.jpeg?raw=true",
       "itemName": "Swim Goggles",
       "categoryName": "Swimming",
       "description": "Anti-fog swim goggles with UV protection and adjustable straps.",
@@ -133,7 +133,7 @@
     },
     {
       "id": "12",
-      "image": "https://example.com/images/skateboard.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.07.jpeg?raw=true",
       "itemName": "Skateboard",
       "categoryName": "Skating",
       "description": "Durable skateboard with high-quality wheels and deck.",
@@ -145,7 +145,7 @@
     },
     {
       "id": "13",
-      "image": "https://example.com/images/hockey-stick.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/hockey.jpg?raw=true",
       "itemName": "Hockey Stick",
       "categoryName": "Hockey",
       "description": "Lightweight composite hockey stick for better performance.",
@@ -157,7 +157,7 @@
     },
     {
       "id": "14",
-      "image": "https://example.com/images/ping-pong-bat.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/photo.59.jpeg?raw=true",
       "itemName": "Ping Pong Bat",
       "categoryName": "Table Tennis",
       "description": "Superior grip and control ping pong bat with advanced rubber.",
@@ -169,7 +169,7 @@
     },
     {
       "id": "15",
-      "image": "https://example.com/images/jump-rope.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.07.jpeg?raw=true",
       "itemName": "Jump Rope",
       "categoryName": "Fitness",
       "description": "High-quality jump rope with adjustable length for all ages.",
@@ -181,7 +181,7 @@
     },
     {
       "id": "16",
-      "image": "https://example.com/images/fishing-rod.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.06.jpeg?raw=true",
       "itemName": "Fishing Rod",
       "categoryName": "Fishing",
       "description": "Lightweight fishing rod with smooth reel for all skill levels.",
@@ -193,7 +193,7 @@
     },
     {
       "id": "17",
-      "image": "https://example.com/images/paddle.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.05.jpeg?raw=true",
       "itemName": "Paddle",
       "categoryName": "Canoeing",
       "description": "Durable and lightweight paddle for canoes and kayaks.",
@@ -205,7 +205,7 @@
     },
     {
       "id": "18",
-      "image": "https://example.com/images/badminton-racket.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.04.jpeg?raw=true",
       "itemName": "Badminton Racket",
       "categoryName": "Badminton",
       "description": "Lightweight racket with great balance for fast play.",
@@ -217,7 +217,7 @@
     },
     {
       "id": "19",
-      "image": "https://example.com/images/fitness-ball.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.07.jpeg?raw=true",
       "itemName": "Fitness Ball",
       "categoryName": "Fitness",
       "description": "Durable exercise ball for yoga, pilates, and strength training.",
@@ -229,7 +229,7 @@
     },
     {
       "id": "20",
-      "image": "https://example.com/images/armband.png",
+      "image": "https://github.com/hasanrafi1122/photos/blob/main/ph-assignment/a-10/icon.07.jpeg?raw=true",
       "itemName": "Sports Armband",
       "categoryName": "Fitness",
       "description": "Adjustable armband for holding phones during workouts.",
