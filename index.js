@@ -1,73 +1,73 @@
-// require('dotenv').config();
-// const express = require('express');
-// const cors = require('cors');
-// const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-// const fs = require('fs');
-// const path = require('path');
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const fs = require('fs');
+const path = require('path');
 
-// const app = express();
-// app.use(cors());
-// app.use(express.json());
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-// const uri = process.env.MONGO_URI; // MongoDB connection URI from environment variables
+const uri = process.env.MONGO_URI; // MongoDB connection URI from environment variables
 
-// // Create a new MongoClient with the URI and options
-// const client = new MongoClient(uri, {
-//   serverApi: {
-//     version: ServerApiVersion.v1,
-//     strict: true,
-//     deprecationErrors: true,
-//   },
-// });
+// Create a new MongoClient with the URI and options
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
 
-// // Ensure database connection is established
-// let isConnected = false;
+// Ensure database connection is established
+let isConnected = false;
 
-// // Function to connect to MongoDB
-// async function connectToDatabase() {
-//   if (isConnected) return client;
+// Function to connect to MongoDB
+async function connectToDatabase() {
+  if (isConnected) return client;
 
-//   try {
-//     await client.connect();
-//     console.log('Connected to MongoDB');
-//     isConnected = true;
-//     return client;
-//   } catch (error) {
-//     console.error('Failed to connect to MongoDB:', error);
-//     throw error;
-//   }
-// }
+  try {
+    await client.connect();
+    console.log('Connected to MongoDB');
+    isConnected = true;
+    return client;
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    throw error;
+  }
+}
 
-// // API route for users
-// app.get('/api/users-2', async (req, res) => {
-//   try {
-//     await connectToDatabase();
-//     const db = client.db('myDatabase');
-//     const userCollection = db.collection('users-2');
-//     const users = await userCollection.find().toArray();
-//     res.json(users);
-//   } catch (error) {
-//     console.error('Error retrieving users:', error);
-//     res.status(500).json({ message: 'Error retrieving users' });
-//   }
-// });
+// API route for users
+app.get('/api/users-2', async (req, res) => {
+  try {
+    await connectToDatabase();
+    const db = client.db('myDatabase');
+    const userCollection = db.collection('users-2');
+    const users = await userCollection.find().toArray();
+    res.json(users);
+  } catch (error) {
+    console.error('Error retrieving users:', error);
+    res.status(500).json({ message: 'Error retrieving users' });
+  }
+});
 
-// // API route for components
-// app.get('/api/component', async (req, res) => {
-//   try {
-//     await connectToDatabase();
-//     const db = client.db('myDatabase');
-//     const componentCollection = db.collection('component');
-//     const componentData = await componentCollection.find().toArray();
-//     res.json(componentData);
-//   } catch (error) {
-//     console.error('Error retrieving component data:', error);
-//     res.status(500).json({ message: 'Error retrieving component data' });
-//   }
-// });
+// API route for components
+app.get('/api/component', async (req, res) => {
+  try {
+    await connectToDatabase();
+    const db = client.db('myDatabase');
+    const componentCollection = db.collection('component');
+    const componentData = await componentCollection.find().toArray();
+    res.json(componentData);
+  } catch (error) {
+    console.error('Error retrieving component data:', error);
+    res.status(500).json({ message: 'Error retrieving component data' });
+  }
+});
 
-// // Export the app for Vercel
-// module.exports = app;
+// Export the app for Vercel
+module.exports = app;
 
 
 
@@ -442,189 +442,189 @@
 
 
 
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+// require('dotenv').config();
+// const express = require('express');
+// const cors = require('cors');
+// const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
 
-const uri = process.env.MONGO_URI; // MongoDB connection URI from environment variables
+// const uri = process.env.MONGO_URI; // MongoDB connection URI from environment variables
 
-// Create a new MongoClient with the URI and options
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+// // Create a new MongoClient with the URI and options
+// const client = new MongoClient(uri, {
+//   serverApi: {
+//     version: ServerApiVersion.v1,
+//     strict: true,
+//     deprecationErrors: true,
+//   },
+// });
 
-// Ensure database connection is established
-let isConnected = false;
+// // Ensure database connection is established
+// let isConnected = false;
 
-// Function to connect to MongoDB
-async function connectToDatabase() {
-  if (isConnected) return client;
+// // Function to connect to MongoDB
+// async function connectToDatabase() {
+//   if (isConnected) return client;
 
-  try {
-    await client.connect();
-    console.log('Connected to MongoDB');
-    isConnected = true;
-    return client;
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    throw error;
-  }
-}
+//   try {
+//     await client.connect();
+//     console.log('Connected to MongoDB');
+//     isConnected = true;
+//     return client;
+//   } catch (error) {
+//     console.error('Failed to connect to MongoDB:', error);
+//     throw error;
+//   }
+// }
 
-// CRUD API routes for `/api/users-2`
+// // CRUD API routes for `/api/users-2`
 
-// Get all users
-app.get('/api/users-2', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const userCollection = db.collection('users-2');
-    const users = await userCollection.find().toArray();
-    res.json(users);
-  } catch (error) {
-    console.error('Error retrieving users:', error);
-    res.status(500).json({ message: 'Error retrieving users' });
-  }
-});
+// // Get all users
+// app.get('/api/users-2', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const userCollection = db.collection('users-2');
+//     const users = await userCollection.find().toArray();
+//     res.json(users);
+//   } catch (error) {
+//     console.error('Error retrieving users:', error);
+//     res.status(500).json({ message: 'Error retrieving users' });
+//   }
+// });
 
-// Add a new user
-app.post('/api/users-2', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const userCollection = db.collection('users-2');
-    const newUser = req.body;
-    const result = await userCollection.insertOne(newUser);
-    res.status(201).json({ message: 'User added successfully', id: result.insertedId });
-  } catch (error) {
-    console.error('Error adding user:', error);
-    res.status(500).json({ message: 'Error adding user' });
-  }
-});
+// // Add a new user
+// app.post('/api/users-2', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const userCollection = db.collection('users-2');
+//     const newUser = req.body;
+//     const result = await userCollection.insertOne(newUser);
+//     res.status(201).json({ message: 'User added successfully', id: result.insertedId });
+//   } catch (error) {
+//     console.error('Error adding user:', error);
+//     res.status(500).json({ message: 'Error adding user' });
+//   }
+// });
 
-// Update a user by ID
-app.put('/api/users-2/:id', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const userCollection = db.collection('users-2');
-    const { id } = req.params;
-    const updatedUser = req.body;
-    const result = await userCollection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: updatedUser }
-    );
-    if (result.modifiedCount > 0) {
-      res.json({ message: 'User updated successfully' });
-    } else {
-      res.status(404).json({ message: 'User not found or no changes made' });
-    }
-  } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(500).json({ message: 'Error updating user' });
-  }
-});
+// // Update a user by ID
+// app.put('/api/users-2/:id', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const userCollection = db.collection('users-2');
+//     const { id } = req.params;
+//     const updatedUser = req.body;
+//     const result = await userCollection.updateOne(
+//       { _id: new ObjectId(id) },
+//       { $set: updatedUser }
+//     );
+//     if (result.modifiedCount > 0) {
+//       res.json({ message: 'User updated successfully' });
+//     } else {
+//       res.status(404).json({ message: 'User not found or no changes made' });
+//     }
+//   } catch (error) {
+//     console.error('Error updating user:', error);
+//     res.status(500).json({ message: 'Error updating user' });
+//   }
+// });
 
-// Delete a user by ID
-app.delete('/api/users-2/:id', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const userCollection = db.collection('users-2');
-    const { id } = req.params;
-    const result = await userCollection.deleteOne({ _id: new ObjectId(id) });
-    if (result.deletedCount > 0) {
-      res.json({ message: 'User deleted successfully' });
-    } else {
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    console.error('Error deleting user:', error);
-    res.status(500).json({ message: 'Error deleting user' });
-  }
-});
+// // Delete a user by ID
+// app.delete('/api/users-2/:id', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const userCollection = db.collection('users-2');
+//     const { id } = req.params;
+//     const result = await userCollection.deleteOne({ _id: new ObjectId(id) });
+//     if (result.deletedCount > 0) {
+//       res.json({ message: 'User deleted successfully' });
+//     } else {
+//       res.status(404).json({ message: 'User not found' });
+//     }
+//   } catch (error) {
+//     console.error('Error deleting user:', error);
+//     res.status(500).json({ message: 'Error deleting user' });
+//   }
+// });
 
-// CRUD API routes for `/api/component`
+// // CRUD API routes for `/api/component`
 
-// Get all components
-app.get('/api/component', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const componentCollection = db.collection('component');
-    const components = await componentCollection.find().toArray();
-    res.json(components);
-  } catch (error) {
-    console.error('Error retrieving components:', error);
-    res.status(500).json({ message: 'Error retrieving components' });
-  }
-});
+// // Get all components
+// app.get('/api/component', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const componentCollection = db.collection('component');
+//     const components = await componentCollection.find().toArray();
+//     res.json(components);
+//   } catch (error) {
+//     console.error('Error retrieving components:', error);
+//     res.status(500).json({ message: 'Error retrieving components' });
+//   }
+// });
 
-// Add a new component
-app.post('/api/component', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const componentCollection = db.collection('component');
-    const newComponent = req.body;
-    const result = await componentCollection.insertOne(newComponent);
-    res.status(201).json({ message: 'Component added successfully', id: result.insertedId });
-  } catch (error) {
-    console.error('Error adding component:', error);
-    res.status(500).json({ message: 'Error adding component' });
-  }
-});
+// // Add a new component
+// app.post('/api/component', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const componentCollection = db.collection('component');
+//     const newComponent = req.body;
+//     const result = await componentCollection.insertOne(newComponent);
+//     res.status(201).json({ message: 'Component added successfully', id: result.insertedId });
+//   } catch (error) {
+//     console.error('Error adding component:', error);
+//     res.status(500).json({ message: 'Error adding component' });
+//   }
+// });
 
-// Update a component by ID
-app.put('/api/component/:id', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const componentCollection = db.collection('component');
-    const { id } = req.params;
-    const updatedComponent = req.body;
-    const result = await componentCollection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: updatedComponent }
-    );
-    if (result.modifiedCount > 0) {
-      res.json({ message: 'Component updated successfully' });
-    } else {
-      res.status(404).json({ message: 'Component not found or no changes made' });
-    }
-  } catch (error) {
-    console.error('Error updating component:', error);
-    res.status(500).json({ message: 'Error updating component' });
-  }
-});
+// // Update a component by ID
+// app.put('/api/component/:id', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const componentCollection = db.collection('component');
+//     const { id } = req.params;
+//     const updatedComponent = req.body;
+//     const result = await componentCollection.updateOne(
+//       { _id: new ObjectId(id) },
+//       { $set: updatedComponent }
+//     );
+//     if (result.modifiedCount > 0) {
+//       res.json({ message: 'Component updated successfully' });
+//     } else {
+//       res.status(404).json({ message: 'Component not found or no changes made' });
+//     }
+//   } catch (error) {
+//     console.error('Error updating component:', error);
+//     res.status(500).json({ message: 'Error updating component' });
+//   }
+// });
 
-// Delete a component by ID
-app.delete('/api/component/:id', async (req, res) => {
-  try {
-    await connectToDatabase();
-    const db = client.db('myDatabase');
-    const componentCollection = db.collection('component');
-    const { id } = req.params;
-    const result = await componentCollection.deleteOne({ _id: new ObjectId(id) });
-    if (result.deletedCount > 0) {
-      res.json({ message: 'Component deleted successfully' });
-    } else {
-      res.status(404).json({ message: 'Component not found' });
-    }
-  } catch (error) {
-    console.error('Error deleting component:', error);
-    res.status(500).json({ message: 'Error deleting component' });
-  }
-});
+// // Delete a component by ID
+// app.delete('/api/component/:id', async (req, res) => {
+//   try {
+//     await connectToDatabase();
+//     const db = client.db('myDatabase');
+//     const componentCollection = db.collection('component');
+//     const { id } = req.params;
+//     const result = await componentCollection.deleteOne({ _id: new ObjectId(id) });
+//     if (result.deletedCount > 0) {
+//       res.json({ message: 'Component deleted successfully' });
+//     } else {
+//       res.status(404).json({ message: 'Component not found' });
+//     }
+//   } catch (error) {
+//     console.error('Error deleting component:', error);
+//     res.status(500).json({ message: 'Error deleting component' });
+//   }
+// });
 
-// Export the app for Vercel
-module.exports = app;
+// // Export the app for Vercel
+// module.exports = app;
