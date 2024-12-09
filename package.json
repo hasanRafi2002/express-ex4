@@ -1,0 +1,27 @@
+{
+  "name": "exp-4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+
+      "start": "node index.js",
+      "dev": "nodemon index.js",
+      "vercel-build": "echo 'Build step'"
+    
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.11.0"
+  },
+  "devDependencies": {
+    "install": "^0.13.0",
+    "npm": "^10.9.2",
+    "vercel": "^39.1.3"
+  }
+}
