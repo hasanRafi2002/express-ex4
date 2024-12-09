@@ -71,17 +71,19 @@
 
 
 
-
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const uri = process.env.MONGO_URI;
+
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -92,10 +94,9 @@ const client = new MongoClient(uri, {
 
 let isConnected = false;
 
-// Function to connect to MongoDB
 async function connectToDatabase() {
   if (isConnected) return client;
-  
+
   try {
     await client.connect();
     console.log('Connected to MongoDB');
@@ -107,143 +108,118 @@ async function connectToDatabase() {
   }
 }
 
-// GET Users
+// USERS-2 ROUTES
+// Get all users with advanced filtering
 app.get('/api/users-2', async (req, res) => {
   try {
     await connectToDatabase();
     const db = client.db('myDatabase');
     const userCollection = db.collection('users-2');
-    const users = await userCollection.find().toArray();
-    res.json(users);
+
+    // Pagination and filtering
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // Build filter object
+    const filter = {};
+    if (req.query.categoryName) filter.categoryName = req.query.categoryName;
+    if (req.query.stockStatus) filter.stockStatus = req.query.stockStatus;
+    
+    // Price range filtering
+    if (req.query.minPrice || req.query.maxPrice) {
+      filter.price = {};
+      if (req.query.minPrice) filter.price.$gte = parseFloat(req.query.minPrice);
+      if (req.query.maxPrice) filter.price.$lte = parseFloat(req.query.maxPrice);
+    }
+
+    // Sorting
+    const sort = {};
+    if (req.query.sortBy) {
+      sort[req.query.sortBy] = req.query.sortOrder === 'desc' ? -1 : 1;
+    }
+
+    const users = await userCollection
+      .find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+
+    const totalUsers = await userCollection.countDocuments(filter);
+
+    res.json({
+      users,
+      currentPage: page,
+      totalPages: Math.ceil(totalUsers / limit),
+      totalUsers
+    });
   } catch (error) {
     console.error('Error retrieving users:', error);
     res.status(500).json({ message: 'Error retrieving users' });
   }
 });
 
+// Get single user by ID
+app.get('/api/users-2/:id', async (req, res) => {
+  try {
+    await connectToDatabase();
+    const db = client.db('myDatabase');
+    const userCollection = db.collection('users-2');
 
+    const user = await userCollection.findOne({ 
+      _id: new ObjectId(req.params.id) 
+    });
 
-
-
-// POST User
-// app.post('/api/users-2', async (req, res) => {
-//   try {
-//     await connectToDatabase();
-//     const db = client.db('myDatabase');
-//     const userCollection = db.collection('users-2');
-    
-//     // Validate request body
-//     const { name, email, age } = req.body;
-//     if (!name || !email) {
-//       return res.status(400).json({ message: 'Name and email are required' });
-//     }
-
-//     const newUser = { name, email, age };
-//     const result = await userCollection.insertOne(newUser);
-    
-//     res.status(201).json({
-//       message: 'User created successfully',
-//       user: { ...newUser, _id: result.insertedId }
-//     });
-//   } catch (error) {
-//     console.error('Error creating user:', error);
-//     res.status(500).json({ message: 'Error creating user' });
-//   }
-// });
-
-
-// POST User/Equipment
-app.post('/api/users-2', async (req, res) => {
-    try {
-      await connectToDatabase();
-      const db = client.db('myDatabase');
-      const userCollection = db.collection('users-2');
-      
-      // Destructure all fields from the request body
-      const {
-        image,
-        itemName,
-        categoryName,
-        description,
-        price,
-        rating,
-        customization,
-        processingTime,
-        stockStatus,
-        userEmail,
-        userName
-      } = req.body;
-  
-      // Validate required fields
-      if (!itemName || !price || !stockStatus || !categoryName) {
-        return res.status(400).json({ 
-          message: 'Missing required fields',
-          requiredFields: ['itemName', 'price', 'stockStatus', 'categoryName']
-        });
-      }
-  
-      // Prepare the new equipment/user document
-      const newEquipment = {
-        image: image || '',
-        itemName,
-        categoryName,
-        description: description || '',
-        price: Number(price),
-        rating: Number(rating) || 0,
-        customization: customization || '',
-        processingTime: processingTime || '',
-        stockStatus: Number(stockStatus),
-        userEmail,
-        userName,
-        createdAt: new Date()
-      };
-  
-      // Insert the new document
-      const result = await userCollection.insertOne(newEquipment);
-      
-      res.status(201).json({
-        message: 'Equipment added successfully',
-        equipment: { 
-          ...newEquipment, 
-          _id: result.insertedId 
-        }
-      });
-    } catch (error) {
-      console.error('Error adding equipment:', error);
-      res.status(500).json({ 
-        message: 'Error adding equipment',
-        error: error.message 
-      });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
 
+    res.json(user);
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    res.status(500).json({ message: 'Error retrieving user' });
+  }
+});
 
+// Create new user
+app.post('/api/users-2', async (req, res) => {
+  try {
+    await connectToDatabase();
+    const db = client.db('myDatabase');
+    const userCollection = db.collection('users-2');
 
+    const newUser = {
+      ...req.body,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
 
+    const result = await userCollection.insertOne(newUser);
 
+    res.status(201).json({
+      message: 'User created successfully',
+      userId: result.insertedId,
+      user: newUser
+    });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ message: 'Error creating user' });
+  }
+});
 
-
-
-// PUT (Update) User
+// Update user
 app.put('/api/users-2/:id', async (req, res) => {
   try {
     await connectToDatabase();
     const db = client.db('myDatabase');
     const userCollection = db.collection('users-2');
-    
-    const userId = new ObjectId(req.params.id);
-    const { name, email, age } = req.body;
-    
-    // Validate input
-    if (!name && !email && !age) {
-      return res.status(400).json({ message: 'No update data provided' });
-    }
 
-    // Prepare update object
-    const updateData = {};
-    if (name) updateData.name = name;
-    if (email) updateData.email = email;
-    if (age) updateData.age = age;
+    const userId = new ObjectId(req.params.id);
+    const updateData = {
+      ...req.body,
+      updatedAt: new Date()
+    };
 
     const result = await userCollection.updateOne(
       { _id: userId },
@@ -264,17 +240,17 @@ app.put('/api/users-2/:id', async (req, res) => {
   }
 });
 
-// DELETE User
+// Delete user
 app.delete('/api/users-2/:id', async (req, res) => {
   try {
     await connectToDatabase();
     const db = client.db('myDatabase');
     const userCollection = db.collection('users-2');
-    
-    const userId = new ObjectId(req.params.id);
-    
-    const result = await userCollection.deleteOne({ _id: userId });
-    
+
+    const result = await userCollection.deleteOne({ 
+      _id: new ObjectId(req.params.id) 
+    });
+
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -289,39 +265,99 @@ app.delete('/api/users-2/:id', async (req, res) => {
   }
 });
 
-// GET Components
-app.get('/api/components', async (req, res) => {
+// COMPONENTS ROUTES
+// Get all components with advanced filtering
+app.get('/api/component', async (req, res) => {
   try {
     await connectToDatabase();
     const db = client.db('myDatabase');
     const componentCollection = db.collection('component');
-    const components = await componentCollection.find().toArray();
-    res.json(components);
+
+    // Pagination and filtering
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // Build filter object
+    const filter = {};
+    if (req.query.category) filter.category = req.query.category;
+    if (req.query.inStock) filter.inStock = req.query.inStock === 'true';
+    
+    // Price range filtering
+    if (req.query.minPrice || req.query.maxPrice) {
+      filter.price = {};
+      if (req.query.minPrice) filter.price.$gte = parseFloat(req.query.minPrice);
+      if (req.query.maxPrice) filter.price.$lte = parseFloat(req.query.maxPrice);
+    }
+
+    // Sorting
+    const sort = {};
+    if (req.query.sortBy) {
+      sort[req.query.sortBy] = req.query.sortOrder === 'desc' ? -1 : 1;
+    }
+
+    const components = await componentCollection
+      .find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+
+    const totalComponents = await componentCollection.countDocuments(filter);
+
+    res.json({
+      components,
+      currentPage: page,
+      totalPages: Math.ceil(totalComponents / limit),
+      totalComponents
+    });
   } catch (error) {
     console.error('Error retrieving components:', error);
     res.status(500).json({ message: 'Error retrieving components' });
   }
 });
 
-// POST Component
-app.post('/api/components', async (req, res) => {
+// Get single component by ID
+app.get('/api/component/:id', async (req, res) => {
   try {
     await connectToDatabase();
     const db = client.db('myDatabase');
     const componentCollection = db.collection('component');
-    
-    // Validate request body
-    const { name, type, description } = req.body;
-    if (!name || !type) {
-      return res.status(400).json({ message: 'Name and type are required' });
+
+    const component = await componentCollection.findOne({ 
+      _id: new ObjectId(req.params.id) 
+    });
+
+    if (!component) {
+      return res.status(404).json({ message: 'Component not found' });
     }
 
-    const newComponent = { name, type, description };
+    res.json(component);
+  } catch (error) {
+    console.error('Error retrieving component:', error);
+    res.status(500).json({ message: 'Error retrieving component' });
+  }
+});
+
+// Create new component
+app.post('/api/component', async (req, res) => {
+  try {
+    await connectToDatabase();
+    const db = client.db('myDatabase');
+    const componentCollection = db.collection('component');
+
+    const newComponent = {
+      ...req.body,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     const result = await componentCollection.insertOne(newComponent);
-    
+
     res.status(201).json({
       message: 'Component created successfully',
-      component: { ...newComponent, _id: result.insertedId }
+      componentId: result.insertedId,
+      component: newComponent
     });
   } catch (error) {
     console.error('Error creating component:', error);
@@ -329,26 +365,18 @@ app.post('/api/components', async (req, res) => {
   }
 });
 
-// PUT (Update) Component
-app.put('/api/components/:id', async (req, res) => {
+// Update component
+app.put('/api/component/:id', async (req, res) => {
   try {
     await connectToDatabase();
     const db = client.db('myDatabase');
     const componentCollection = db.collection('component');
-    
-    const componentId = new ObjectId(req.params.id);
-    const { name, type, description } = req.body;
-    
-    // Validate input
-    if (!name && !type && !description) {
-      return res.status(400).json({ message: 'No update data provided' });
-    }
 
-    // Prepare update object
-    const updateData = {};
-    if (name) updateData.name = name;
-    if (type) updateData.type = type;
-    if (description) updateData.description = description;
+    const componentId = new ObjectId(req.params.id);
+    const updateData = {
+      ...req.body,
+      updatedAt: new Date()
+    };
 
     const result = await componentCollection.updateOne(
       { _id: componentId },
@@ -369,17 +397,17 @@ app.put('/api/components/:id', async (req, res) => {
   }
 });
 
-// DELETE Component
-app.delete('/api/components/:id', async (req, res) => {
+// Delete component
+app.delete('/api/component/:id', async (req, res) => {
   try {
     await connectToDatabase();
     const db = client.db('myDatabase');
     const componentCollection = db.collection('component');
-    
-    const componentId = new ObjectId(req.params.id);
-    
-    const result = await componentCollection.deleteOne({ _id: componentId });
-    
+
+    const result = await componentCollection.deleteOne({ 
+      _id: new ObjectId(req.params.id) 
+    });
+
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: 'Component not found' });
     }
@@ -392,6 +420,15 @@ app.delete('/api/components/:id', async (req, res) => {
     console.error('Error deleting component:', error);
     res.status(500).json({ message: 'Error deleting component' });
   }
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    message: 'Something went wrong!', 
+    error: process.env.NODE_ENV === 'production' ? {} : err.message 
+  });
 });
 
 // Export the app for Vercel
